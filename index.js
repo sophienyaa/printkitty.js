@@ -1,5 +1,8 @@
 const noble = require('@abandonware/noble');
 
+let writeCharacteristic;
+let notifyCharacteristic;
+
 //TODO: Remove this, move to CRC8 lib
 const crc8Table = [
     0x00, 0x07, 0x0e, 0x09, 0x1c, 0x1b, 0x12, 0x15, 0x38, 0x3f, 0x36, 0x31,
@@ -55,74 +58,95 @@ function buildCommandMessage(cmd, data) {
     return Buffer.concat(buffers);
 }
 
-
-noble.startScanning(); // any service UUID, no duplicates
-
-
-noble.on('discover', async (peripheral) => {
-   if(peripheral.advertisement.localName === 'GB01') {
-        console.log('found printer');
-
-        await noble.stopScanningAsync();
-        await peripheral.connectAsync();
-
-        const all = await peripheral.discoverAllServicesAndCharacteristicsAsync();
-
-        //console.log(all.characteristics);
-        let writeChr;
-        let notifChr;
-        all.characteristics.forEach(c =>{
-            if(c.uuid == 'ae01') {
-                writeChr = c;
-            }
-            if(c.uuid == 'ae02') { //maybe ae02
-                notifChr = c;
+async function connectToPrinter(printerName, timeout) {
+    noble.startScanning(); 
+    return new Promise((resolve, reject) => {
+        noble.on('discover', async (peripheral) => {
+            if(peripheral.advertisement.localName === printerName) {
+                 console.log('found printer');
+                 await noble.stopScanningAsync();
+                 await peripheral.connectAsync();
+                 resolve(peripheral);   
             }
         });
 
-
-        writeChr.once('write', function() {         console.log('wrote data');});
-
-        
-        const buf = buildCommandMessage(0xA1, Buffer.from([0x20]))
-
-        writeChr.write(buf, true, (err) => {console.log(err)});
-
-        noble.on('warning', (message) => {
-            console.log(message);
-        });
+        setTimeout(() => {
+            reject(new Error("timeout"));
+        }, timeout);
+})};
 
 
+async function setCharacteristics(printer) {
+    const all = await printer.discoverAllServicesAndCharacteristicsAsync();
+    all.characteristics.forEach(c =>{
+        if(c.uuid == 'ae01') {
+            writeCharacteristic = c;
+        }
+        if(c.uuid == 'ae02') { //maybe ae02
+            notifyCharacteristic = c;
+        }
+    });
+}
 
-        notifChr.subscribe((er) => {
-            if(er) {
-                console.log('failed to subscribe');
-            }
-        })
+async function setupListeners(notifyCharacteristic, writeCharacteristic) {
+    noble.on('warning', (message) => {
+        console.log('got warning:')
+        console.log(message);
+    });
+    
+    //notify channel, uid AE02
+    notifyCharacteristic.subscribe((er) => {
+        if(er) {
+            console.log('failed to subscribe to notifications');
+        }
+    })
+    notifyCharacteristic.once('notify', (state) => {
+        console.log('recieved notification from printer:');
+        console.log(state);
+    });
+    notifyCharacteristic.on('data', (data, isNotification) => {
+        console.log('data from printer:');
+        console.log(data);
+        console.log(isNotification);
+    });
+    
+    //write char AE01
+    writeCharacteristic.once('write', () => {
+        console.log('wrote to printer');
+    });
+    
+}
 
-        writeChr.subscribe((er) => {
-            if(er) {
-                console.log('failed to subscribe');
-            }
-        })
+function feedPaper(steps) {
+    //do the thing
+    const buf = buildCommandMessage(0xA1, Buffer.from([steps]))
+    writeCharacteristic.write(buf, true, (err) => {
+        console.log(err)
+    });
+}
 
-        notifChr.once('notify', (state) => {
-            console.log('got response');
-            console.log(state);
-        });
-
-        notifChr.on('data', (data, isNotification) => {
-            console.log('data');
-            console.log(data);
-            console.log(isNotification);
-        });
-
-        
+function retractPaper(steps) {
+    //do the thing
+    const buf = buildCommandMessage(0xA0, Buffer.from([steps]))
+    writeCharacteristic.write(buf, true, (err) => {
+        console.log(err)
+    });
+}
 
 
 
-        //const res = await charToUse.writeAsync(buf, false);
+async function main() {
 
-        //console.log(res);*
-    }
-});
+    //connect to printer, give name and timeout in ms
+    const printer =  await connectToPrinter("GB01", 3000);
+
+    //get our chars
+    await setCharacteristics(printer);
+
+    //setup event listeners
+    await setupListeners(notifyCharacteristic, writeCharacteristic);
+
+    
+}
+
+main();
