@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "@abandonware/noble": "^1.9.2-15",
+    "noble": "^1.9.1"
+  },
+  "name": "printkitty.js",
+  "version": "1.0.0",
+  "description": "NodeJS for Cat Printers",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
