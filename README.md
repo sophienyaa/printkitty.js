@@ -26,18 +26,18 @@ e.g `node index.js --image grumpy.png --loglevel trace`
 
 |Flag|Alias|Description|Data Type|Default|Required|
 |----|-----|-----------|----------|------|--------|
-|      |--version     |Show version number                                                                         |[boolean]|
-|  -i, |--image       |Path to the image you want to print (e.g ~/folder/image.png)                                 |[string]|
-|  -t, |--text        |Text you want to print, default font is Arial, 20pt                                          |[string]|
-|  -f, |--font        |The font family to use (e.g Comic Sans)                                                  |[string] | "arial" |
-|  -s, |--size        |The font size to use (e.g 16)                                                           |[integer]|20|
-|  -g, |--getinfo     |Returns printer info in hex                                                                 |[boolean]|
-|  -u, |--getstatus   |Returns printer info in hex                                                                 |[boolean]||
-|  -e, |--eject       |Ejects a number of lines of paper (e.g 50)                                                   |[integer]||
-|  -r, |--retract     |Retracts the paper by a number of lines (e.g 50)                                             |[integer]||
-|  -n, |--devicename  |The name of your cat printer (e.g GT01)                                                      |[string]|"GB01"| Yes |
-|  -o, |--timeout     |Time in seconds to wait before aborting, when connecting to the printer (e.g 10)         |[integer]|5||
-|  -l, |--loglevel    |Logging level to use, values are trace, debug, info, warn, error, fatal. Defaults to error |[string]|"info"|
-|  -h, |--help        |Show help                                                                                   |[boolean]| |
+|    |--version     |Show version number                                                                         |[boolean]|
+| -i |--image       |Path to the image you want to print (e.g ~/folder/image.png)                                 |[string]|
+| -t |--text        |Text you want to print, default font is Arial, 20pt                                          |[string]|
+| -f |--font        |The font family to use (e.g Comic Sans)                                                  |[string] | "arial" |
+| -s |--size        |The font size to use (e.g 16)                                                           |[integer]|20|
+| -g |--getinfo     |Returns printer info in hex                                                                 |[boolean]|
+| -u |--getstatus   |Returns printer info in hex                                                                 |[boolean]||
+| -e |--eject       |Ejects a number of lines of paper (e.g 50)                                                   |[integer]||
+| -r |--retract     |Retracts the paper by a number of lines (e.g 50)                                             |[integer]||
+| -n |--devicename  |The name of your cat printer (e.g GT01)                                                      |[string]|"GB01"| Yes |
+| -o |--timeout     |Time in seconds to wait before aborting, when connecting to the printer (e.g 10)         |[integer]|5||
+| -l |--loglevel    |Logging level to use, values are trace, debug, info, warn, error, fatal. Defaults to error |[string]|"info"|
+| -h |--help        |Show help                                                                                   |[boolean]| |
 
 
