@@ -1,13 +1,16 @@
 {
   "dependencies": {
     "@abandonware/noble": "^1.9.2-15",
-    "noble": "^1.9.1"
+    "floyd-steinberg": "^1.0.6",
+    "pino": "^7.10.0",
+    "pino-pretty": "^7.6.1",
+    "sharp": "^0.30.4",
+    "yargs": "^17.4.1"
   },
   "name": "printkitty.js",
   "version": "1.0.0",
   "description": "NodeJS for Cat Printers",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
