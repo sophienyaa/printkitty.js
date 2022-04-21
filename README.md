@@ -38,6 +38,6 @@ e.g `node index.js --image grumpy.png --loglevel trace`
 |  -n, |--devicename  |The name of your cat printer (e.g GT01)                                                      |[string]|"GB01"| Yes |
 |  -o, |--timeout     |Time in seconds to wait before aborting, when connecting to the printer (e.g 10)         |[integer]|5||
 |  -l, |--loglevel    |Logging level to use, values are trace, debug, info, warn, error, fatal. Defaults to error |[string]|"info"|
-|  -h, |--help        Show help                                                                                   [boolean]
+|  -h, |--help        |Show help                                                                                   |[boolean]| |
 
 
