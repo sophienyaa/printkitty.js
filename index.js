@@ -1,6 +1,8 @@
 const printer = require('./printer');
 const image = require('./image');
+const text = require('./text');
 const cli = require('./cli');
+const logger = require('./logger');
 const args = cli.args;
 
 async function main() {
@@ -16,7 +18,6 @@ async function main() {
         }
         if(args.eject) {
             await printer.feedPaper(args.eject);
-            //await process.exit(0);
         }
         if(args.retract) {
             await printer.retractPaper(args.retract);
@@ -26,12 +27,12 @@ async function main() {
             await printer.printImage(toPrint);
         }
         if(args.text) {
-            console.log('This isnt yet impelemted :( ');
-            //TODO: implement this!
+            const toPrint = await text.printText(args.text, args.font, args.fontsize);
+            await printer.printImage(toPrint);
         }
     }
     catch(e) {
-        //TODO: loging!
+        logger.error(e, 'Oh noes!');
         process.exit(1);
     }
 }

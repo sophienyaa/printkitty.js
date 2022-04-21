@@ -17,7 +17,7 @@ const argv = yargs
         type: 'string',
         default: 'arial'
     })
-    .option('size', {
+    .option('fontsize', {
         alias: 's',
         description: 'The font size to use (e.g 16)',
         type: 'integer',
