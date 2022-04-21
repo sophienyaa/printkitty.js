@@ -1,0 +1,3 @@
+# printkitty.js
+
+~nyaa!
