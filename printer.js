@@ -195,7 +195,7 @@ async function setupListeners(notifyCharacteristic, writeCharacteristic) {
     notifyCharacteristic.subscribe((er) => {
         if(er) {
             logger.error('Failed to subsribe to printer notifications, exiting');
-            process.exit(1);
+           //process.exit(1);
         }
     })
     notifyCharacteristic.once('notify', (state) => {
@@ -282,7 +282,7 @@ module.exports = {
         await writeCharacteristic.write(speed, true);
 
         //6. print the image, sleep 10ms between lines so the printer doesn't get overwhelmed
-        logger.trace('Printing image!');
+        //logger.trace(`Printing image!, has ${imgData.data.length} bits`);
         for (let i = 0; i < imgData.length; i++) {
             const imgline = await buildCommandMessage(commands.print.byte, imgData[i]);            
             await writeCharacteristic.writeAsync(imgline, true);
@@ -300,6 +300,7 @@ module.exports = {
         await writeCharacteristic.write(finish, true);
 
         logger.info('Printing complete!');
+        process.exit(0);
     },
     
     printText: async function(text) {
