@@ -5,7 +5,7 @@ const logger = require('./logger');
 async function addTextOnImage(text, font, size) {
   try {
 
-    //TODO make this dynamic / genrally improve it. Works for now though
+    //TODO make this dynamic / generally improve it. Works for now though
     const width = 348;
     const height = 348;
 
@@ -29,7 +29,7 @@ async function addTextOnImage(text, font, size) {
   }
 }
 
-module.exports ={
+module.exports = {
     printText: async function(text, font, size) {
         const txtImg = await addTextOnImage(text, font, size);
         logger.trace('Formatting text for printing...');

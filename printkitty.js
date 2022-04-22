@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const printer = require('./printer');
 const image = require('./image');
 const text = require('./text');
