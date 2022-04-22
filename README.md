@@ -1,6 +1,11 @@
 # printkitty.js
 
-~nyaa!
+<div style="text-align: center; display: inline-block; vertical-align: top;">
+    <img src="img/uwu-transparent.png" alt="drawing" width="200"/>
+    <span style="display: block;">~nyaa!</span>
+</div>
+
+&nbsp;
 
 ## What is this?
 
@@ -8,11 +13,18 @@ This is a (pretty awful) utility to use with 'Cat Printers', aka GBO1 / GT01 pri
 
 The are small, monochrome, battery powered thermal printers that communicate using Bluetooth Low Energy.
 
- They are available at the usual online retailers such as [Amazon](https://www.amazon.co.uk/Wireless-Bluetooth-Printers-Learning-Compatible/dp/B09MCNVRJD/).
+They are available at the usual online retailers such as [Amazon](https://www.amazon.co.uk/Wireless-Bluetooth-Printers-Learning-Compatible/dp/B09MCNVRJD/).
 
- ## What can it do?
+<div style="text-align: center; display: inline-block; vertical-align: top; border: 5px solid black; outline: 2px solid #FFF;">
+    <img src="img/cat-printer.png" alt="The GB01 cat printer" width="200"/>
+    <span style="display: block;">The "GB01" cat printer</span>
+</div>
 
- Right now, it can eject and retract paper, display device information and print images and text.
+&nbsp;
+
+## What can it do?
+
+Right now, it can eject and retract paper, display device information and print images and text.
 
 ## How do I used it?
 
@@ -46,26 +58,25 @@ Eject paper for 100 steps
 
 `printkitty --eject 100`
 
-
 **NOTE:** it currently only auto-exits after printing images or text, for other commands you'll need to press `crtl+c` when they have finished.
 
 ### Command Reference
 
-|Flag|Alias|Description|Data Type|Default|Required|
-|----|-----|-----------|----------|------|--------|
-|    |--version     |Show version number                                                                         |boolean|
-| -i |--image       |Path to the image you want to print (e.g ~/folder/image.png)                                 |string|
-| -t |--text        |Text you want to print, default font is Arial, 20pt                                          |string|
-| -f |--font        |The font family to use (e.g Comic Sans)                                                  |string| "arial" |
-| -s |--size        |The font size to use (e.g 16)                                                           |integer|20|
-| -g |--getinfo     |Returns printer info in hex                                                                 |boolean|
-| -u |--getstatus   |Returns printer info in hex                                                                 |boolean||
-| -e |--eject       |Ejects a number of lines of paper (e.g 50)                                                   |integer||
-| -r |--retract     |Retracts the paper by a number of lines (e.g 50)                                             |integer||
-| -n |--devicename  |The name of your cat printer (e.g GT01)                                                      |string|"GB01"| Yes |
-| -o |--timeout     |Time in seconds to wait before aborting, when connecting to the printer (e.g 10)         |integer|5||
-| -l |--loglevel    |Logging level to use, values are trace, debug, info, warn, error, fatal. Defaults to error |string|"info"|
-| -h |--help        |Show help                                                                                   |boolean| |
+|Flag|Alias         |Description                                                                        |Data Type  |Default|Required|
+|----|--------------|-----------------------------------------------------------------------------------|-----------|-------|--------|
+|    |--version     |Show version number                                                                |boolean    |       |        |
+| -i |--image       |Path to the image you want to print (e.g `~/folder/image.png`)                     |string     |       |Yes OR  |
+| -t |--text        |Text you want to print, default font is Arial, 20px                                |string     |       |Yes OR  |
+| -f |--font        |The font to use in quotes, this must be provided as it exists on your machine (e.g `"Comic Sans MS"`)                                     |string     |`"Arial"`|        |
+| -s |--size        |The font size to use, in pixels high (e.g `16`)                                    |integer    |`20`   |        |
+| -g |--getinfo     |Returns printer info in hex                                                        |boolean    |       |Yes OR  |
+| -u |--getstatus   |Returns printer info in hex                                                        |boolean    |       |Yes OR  |   
+| -e |--eject       |Ejects a number of lines of paper (e.g `50`)                                       |integer    |       |Yes OR  |
+| -r |--retract     |Retracts the paper by a number of lines (e.g `50`)                                 |integer    |       |Yes OR  |
+| -n |--devicename  |The name of your cat printer (e.g `GT01`)                                          |string     |`GB01` |Yes     |
+| -o |--timeout     |Time in seconds to wait before aborting, when connecting to the printer (e.g `10`) |integer    |`5`    |        |
+| -l |--loglevel    |Logging level to use. Options: `trace`, `debug`, `info`, `warn`, `error`, `fatal.` |string     |`info` |        |
+| -h |--help        |Show help                                                                          |boolean    |       |        |
 
 
 ## Future Ideas

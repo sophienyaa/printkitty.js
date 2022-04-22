@@ -8,18 +8,18 @@ const argv = yargs
     })
     .option('text', {
         alias: 't',
-        description: 'Text you want to print, default font is Arial, 20pt',
+        description: 'Text you want to print in quotes, default font is Arial, 20px (e.g "hello world")',
         type: 'string',
     })
     .option('font', {
         alias: 'f',
-        description: 'The font family to use (e.g Comic Sans)',
+        description: 'The font to use in quotes, this must be provided as it exists on your machine (e.g "Comic Sans MS")',
         type: 'string',
         default: 'arial'
     })
     .option('fontsize', {
         alias: 's',
-        description: 'The font size to use (e.g 16)',
+        description: 'The font size to use, in pixels high (e.g 16)',
         type: 'integer',
         default: 20
     })
@@ -67,9 +67,14 @@ const argv = yargs
     .epilogue('For more information, check out the project repository at https://github.com/mickwheelz/printkitty.js ~nyaa')
     .env('PRINTKITTY')
     .demandOption('devicename', 'You must specify a device')
-    //.demandOption('image', 'You must specify a image filename')
-
     .wrap(yargs.terminalWidth())
+    .check((argv) => {
+        if (!argv.image && !argv.text && !argv.eject && !argv.retract && !argv.getinfo && !argv.getstatus ) {
+          throw new Error("Oh Noes! You must specify a task to perform, e.g --image <image>, --eject 20")
+        } else {
+          return true
+        }
+      })
     .argv;
 
 module.exports = {

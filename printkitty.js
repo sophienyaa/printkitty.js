@@ -26,11 +26,11 @@ async function main() {
         }
         if(args.image) {
             const toPrint = await image.process(args.image);
-            await printer.printImage(toPrint);
+            await printer.print(toPrint, 'image');
         }
         if(args.text) {
-            const toPrint = await text.printText(args.text, args.font, args.fontsize);
-            await printer.printImage(toPrint);
+            const toPrint = await text.processText(args.text, args.font, args.fontsize);
+            await printer.print(toPrint, 'text');
         }
     }
     catch(e) {

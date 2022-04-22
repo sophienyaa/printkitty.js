@@ -253,7 +253,7 @@ module.exports = {
     /*
         imgData:    an array of 48 byte buffers of the image. each byte is 8 pixel bits (e.g 11111111 / 0xFF for a solid line)
     */
-    printImage: async function(imgData) {
+    print: async function(imgData, printMode) {
         logger.info('Starting printing process!');
 
         //1, Set quality - 0x33
@@ -272,8 +272,9 @@ module.exports = {
         await writeCharacteristic.writeAsync(energy, true);
 
         //4. set drawing mode
-        logger.trace(`Setting drawing mode to ${commands.drawingMode.options.image}`);
-        const mode = await buildCommandMessage(commands.drawingMode.byte, commands.drawingMode.options.image);
+        logger.trace(`Setting drawing mode to ${printMode}`);
+        const drawingMode = printMode === 'image' ?  commands.drawingMode.options.image :  commands.drawingMode.options.text;
+        const mode = await buildCommandMessage(commands.drawingMode.byte,drawingMode);
         await writeCharacteristic.write(mode, true);
         
         //5.set feed speed
@@ -282,7 +283,7 @@ module.exports = {
         await writeCharacteristic.write(speed, true);
 
         //6. print the image, sleep 10ms between lines so the printer doesn't get overwhelmed
-        //logger.trace(`Printing image!, has ${imgData.data.length} bits`);
+        logger.trace(`Printing image!, has ${imgData.length} lines`);
         for (let i = 0; i < imgData.length; i++) {
             const imgline = await buildCommandMessage(commands.print.byte, imgData[i]);            
             await writeCharacteristic.writeAsync(imgline, true);
@@ -301,9 +302,6 @@ module.exports = {
 
         logger.info('Printing complete!');
         process.exit(0);
-    },
-    
-    printText: async function(text) {
-        //TODO: Implement this!
     }
+
 }
