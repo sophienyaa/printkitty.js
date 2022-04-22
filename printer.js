@@ -3,6 +3,7 @@ const logger = require('./logger');
 
 let writeCharacteristic;
 let notifyCharacteristic;
+let printer;
 
 const commands = {
     retractPaper: {
@@ -217,7 +218,7 @@ async function setupListeners(notifyCharacteristic, writeCharacteristic) {
 module.exports = {
     connect: async function(deviceName, timeoutS) {
         //connect to printer, give name and timeout in ms
-        const printer =  await connectToPrinter(deviceName, (timeoutS*1000));
+        printer =  await connectToPrinter(deviceName, (timeoutS*1000));
         //get our chars
         await setCharacteristics(printer);
         //setup event listeners
@@ -253,7 +254,7 @@ module.exports = {
     /*
         imgData:    an array of 48 byte buffers of the image. each byte is 8 pixel bits (e.g 11111111 / 0xFF for a solid line)
     */
-    print: async function(imgData, printMode) {
+    print: async function(imgData, printMode, ipp) {
         logger.info('Starting printing process!');
 
         //1, Set quality - 0x33
@@ -301,7 +302,12 @@ module.exports = {
         await writeCharacteristic.write(finish, true);
 
         logger.info('Printing complete!');
-        process.exit(0);
+
+        //disconnect when finished
+        await printer.disconnectAsync();
+        if(!ipp) {
+            process.exit(0);
+        }
     }
 
 }
