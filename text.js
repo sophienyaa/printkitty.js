@@ -30,7 +30,7 @@ async function addTextOnImage(text, font, size) {
 }
 
 module.exports = {
-    printText: async function(text, font, size) {
+    processText: async function(text, font, size) {
         const txtImg = await addTextOnImage(text, font, size);
         logger.trace('Formatting text for printing...');
         return await image.buildBMP(txtImg);
