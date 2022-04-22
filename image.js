@@ -31,7 +31,7 @@ module.exports = {
     process: async function(fileName) {
         const processed = await processImage(fileName);
         logger.trace('Formatting image for printing...');
-        return await buildBMP(processed);
+        return await this.buildBMP(processed);
     },
     buildBMP: async function(img) {
         let imgArray = [];

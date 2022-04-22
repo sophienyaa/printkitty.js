@@ -4,11 +4,9 @@
 <img src="img/uwu-transparent.png" alt="drawing" width="200"/>
 <span style="display: block;">~nyaa!</span>
 
-&nbsp;
-
 ## What is this?
 
-This is a (pretty awful) utility to use with 'Cat Printers', aka GBO1 / GT01 printers.
+This is a (pretty awful) utility to use with 'Cat Printers', aka GB01 / GT01 printers.
 
 The are small, monochrome, battery powered thermal printers that communicate using Bluetooth Low Energy.
 
@@ -17,16 +15,17 @@ They are available at the usual online retailers such as [Amazon](https://www.am
 <img src="img/cat-printer.png" alt="The GB01 cat printer" width="200"/>
 <span style="display: block;">The "GB01" cat printer</span>
 
-&nbsp;
-
 ## What can it do?
 
-Right now, it can eject and retract paper, display device information and print images and text.
+This tool let you use your beloved cat printer from your computer. It can be used in two ways;
 
-## How do I used it?
+1. IPP mode, where it emulates a *normal printer*. You can simply add it in your system preferences and print from any application!
+
+2. CLI mode, where you can directly interact with it from the command line. In CLI mode you can print images and text, eject and retract paper and get device information.
+
+## Installation
 
 You'll need NodeJS and NPM installed, this has been tested with v17.
-
 
 1. Clone this repository (or download it) by running;
 `git clone https://github.com/mickwheelz/printkitty.js.git`
@@ -35,6 +34,8 @@ You'll need NodeJS and NPM installed, this has been tested with v17.
 
 3. Install the dependencies with `npm install`
 
+4. If you want to use IPP mode, you need `ghostscript` installed. Do this on macOS with `brew install ghostscript`
+
 4. Link the command with `sudo npm link`
 
 Once you've done this you can simply run `printkitty --<options>` 
@@ -42,6 +43,10 @@ Once you've done this you can simply run `printkitty --<options>`
 See the next section for some examples
 
 ### Examples
+
+Run in IPP mode and listen for print jobs with the name 'kitty'
+
+`printkitty --ipp --ippname "kitty"`
 
 Print an image called `grumpy.png` that is in the same directory as the code
 
@@ -82,7 +87,7 @@ There are a tonne of general improvements and optimisations to make but I'd like
 
 * RESTful API
 * GUI/Front End
-* IPP/PS driver so the printer can be used like a normal printer.
+* ~~IPP/PS driver so the printer can be used *...like a normal printer.*~~
 
 ## Thanks
 
@@ -95,5 +100,7 @@ This sillyness was made possible by below group of other cat printer aficionados
 * [bad_opcode](https://twitter.com/bad_opcode) further documented the printers protocol [here](https://github.com/JJJollyjim/catprinter/blob/f5322f7d728ed491218d788f0eff6cad7e11ab3f/COMMANDS.md) and has a python implementation [here](https://github.com/amber-sixel/gb01print), which helped a lot in building this.
 
 * [noopkat](https://twitter.com/noopkat) built a nice little [floyd-steinberg package](https://github.com/noopkat/floyd-steinberg), that saved me when I was having issues with [sharp's](https://sharp.pixelplumbing.com/) version.
+
+* [watson](https://twitter.com/wa7son) for his really cool [ipp-printer package](https://github.com/watson/ipp-printer), that is the core of IPP mode.
 
 * Last but not least, [xssfox](https://twitter.com/xssfox) was the one who inspired me to join in on this in the first place, she also has a python implementation [here](https://gist.github.com/xssfox/b911e0781a763d258d21262c5fdd2dec)

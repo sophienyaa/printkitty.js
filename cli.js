@@ -6,6 +6,17 @@ const argv = yargs
         description: 'Path to the image you want to print (e.g ~/folder/image.png)',
         type: 'string',
     })
+    .option('ipp', {
+        alias: 'p',
+        description: 'Run in IPP/Postscript mode, exposes a generic PS printer you can use from any app',
+        type: 'boolean',
+    })
+    .option('ippname', {
+        alias: 'q',
+        description: 'Name to broadcast when in IPP/PS Mode (e.g "Cat Printer")',
+        type: 'string',
+        default: 'cat printer uwu'
+    })
     .option('text', {
         alias: 't',
         description: 'Text you want to print in quotes, default font is Arial, 20px (e.g "hello world")',
@@ -69,7 +80,7 @@ const argv = yargs
     .demandOption('devicename', 'You must specify a device')
     .wrap(yargs.terminalWidth())
     .check((argv) => {
-        if (!argv.image && !argv.text && !argv.eject && !argv.retract && !argv.getinfo && !argv.getstatus ) {
+        if (!argv.ipp & !argv.image && !argv.text && !argv.eject && !argv.retract && !argv.getinfo && !argv.getstatus ) {
           throw new Error("Oh Noes! You must specify a task to perform, e.g --image <image>, --eject 20")
         } else {
           return true
