@@ -1,9 +1,8 @@
 # printkitty.js
 
-<div style="text-align: center; display: inline-block; vertical-align: top;">
-    <img src="img/uwu-transparent.png" alt="drawing" width="200"/>
-    <span style="display: block;">~nyaa!</span>
-</div>
+
+<img src="img/uwu-transparent.png" alt="drawing" width="200"/>
+<span style="display: block;">~nyaa!</span>
 
 &nbsp;
 
@@ -15,10 +14,8 @@ The are small, monochrome, battery powered thermal printers that communicate usi
 
 They are available at the usual online retailers such as [Amazon](https://www.amazon.co.uk/Wireless-Bluetooth-Printers-Learning-Compatible/dp/B09MCNVRJD/).
 
-<div style="text-align: center; display: inline-block; vertical-align: top; border: 5px solid black; outline: 2px solid #FFF;">
-    <img src="img/cat-printer.png" alt="The GB01 cat printer" width="200"/>
-    <span style="display: block;">The "GB01" cat printer</span>
-</div>
+<img src="img/cat-printer.png" alt="The GB01 cat printer" width="200"/>
+<span style="display: block;">The "GB01" cat printer</span>
 
 &nbsp;
 
