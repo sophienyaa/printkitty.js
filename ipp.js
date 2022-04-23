@@ -17,6 +17,10 @@ const printer = new Printer(config)
 
 module.exports = {
 
+    /**
+     * Listens for print and handles jobs over IPP.
+     * @return {void}
+     */
     listenForPrintJobs: async function() {
 
         logger.info('Starting in IPP / PS Mode...');
@@ -41,7 +45,7 @@ module.exports = {
                 //step 1, PS -> PNG with ghostscript
                 //TODO: find a way to make this less shit!
                 await exec(
-                    `gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=pnggray -sOutputFile=${filename}.png ${filename}`
+                    `gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=pngmono -sOutputFile=${filename}.png ${filename}`
                 );
                 
                 //Step 2, convert to format for printer
@@ -49,7 +53,7 @@ module.exports = {
                 await catPrinter.connect(args.devicename, args.timeout);
 
                 //Step 3, print as normal
-                const toPrint = await image.process(`${filename}.png`);
+                const toPrint = await image.process(`${filename}.png`, true);
                 await catPrinter.print(toPrint, 'image', true);
 
                 //Step 4, delete temp files

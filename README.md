@@ -67,6 +67,8 @@ Eject paper for 100 steps
 |Flag|Alias         |Description                                                                        |Data Type  |Default|Required|
 |----|--------------|-----------------------------------------------------------------------------------|-----------|-------|--------|
 |    |--version     |Show version number                                                                |boolean    |       |        |
+| -p |--ipp         |Run in IPP/Postscript mode, exposes a generic PS printer you can use from any app  |boolean    |       |Yes OR  |
+| -q |--ippname     |Name to broadcast when in IPP/PS Mode (e.g `"kitty"`)                              |string     |`"cat printer uwu"`||
 | -i |--image       |Path to the image you want to print (e.g `~/folder/image.png`)                     |string     |       |Yes OR  |
 | -t |--text        |Text you want to print, default font is Arial, 20px                                |string     |       |Yes OR  |
 | -f |--font        |The font to use in quotes, this must be provided as it exists on your machine (e.g `"Comic Sans MS"`)                                     |string     |`"Arial"`|        |

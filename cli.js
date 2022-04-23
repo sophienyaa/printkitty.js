@@ -13,7 +13,7 @@ const argv = yargs
     })
     .option('ippname', {
         alias: 'q',
-        description: 'Name to broadcast when in IPP/PS Mode (e.g "Cat Printer")',
+        description: 'Name to broadcast when in IPP/PS Mode (e.g "kitty")',
         type: 'string',
         default: 'cat printer uwu'
     })

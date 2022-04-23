@@ -216,6 +216,13 @@ async function setupListeners(notifyCharacteristic, writeCharacteristic) {
 }
 
 module.exports = {
+
+    /**
+     * Connects to a printer over BLE
+     * @param {String} deviceName - The devices advertised name (e.g GB01)
+     * @param {integer} timeoutS - Time to wait in seconds before timing out
+     * @returns {void}
+     */
     connect: async function(deviceName, timeoutS) {
         //connect to printer, give name and timeout in ms
         printer =  await connectToPrinter(deviceName, (timeoutS*1000));
@@ -225,35 +232,55 @@ module.exports = {
         await setupListeners(notifyCharacteristic, writeCharacteristic);
     },
 
-    //Implementing only needed functions for now
-
+    /**
+     * Feeds paper out of the printer for x steps
+     * @param {integer} steps - Number of steps to feed for
+     * @returns {void}
+     */
     feedPaper: async function(steps) {
         logger.info(`Ejecting paper for ${steps} steps`);
         const feed = await buildCommandMessage(commands.feedPaper.byte, Buffer.from([steps]))
         await writeCharacteristic.writeAsync(feed, true);
     },
 
+    /**
+     * Retracts paper in to the printer for x steps
+     * @param {integer} steps - Number of retract to feed for
+     * @returns {void}
+     */
     retractPaper: async function(steps) {
         logger.info(`Retracting paper for ${steps} steps`);
         const retract = await buildCommandMessage(commands.retractPaper.byte, Buffer.from([steps]))
         await writeCharacteristic.writeAsync(retract, true);
     },
 
+    /**
+     * Requests device information
+     * @returns {void}
+     */
     getDeviceInfo: async function() {
         logger.info('Requesting printer info...');
         const info = await buildCommandMessage(commands.getDeviceInfo.byte, commands.getDeviceInfo.options.get);
         await writeCharacteristic.writeAsync(info, true)
     },
 
+    /**
+     * Requests device status
+     * @returns {void}
+     */
     getDeviceStatus: async function() {
         logger.info('Requesting printer status...');
         const status = await buildCommandMessage(commands.getDeviceStatus.byte, commands.getDeviceStatus.options.get)
         await writeCharacteristic.write(status, true);
     },
     
-    /*
-        imgData:    an array of 48 byte buffers of the image. each byte is 8 pixel bits (e.g 11111111 / 0xFF for a solid line)
-    */
+    /**
+     * Prints a bitmap
+     * @param {Object} imgData - An array of 48 byte buffers, 1 per line of the image.
+     * @param {String} printMode - Flag to tell the printer if its text or an image
+     * @param {Boolean} ipp - Flag to tell the printer its in IPP mode, determines behaviour at the end of a print (Exit for non IPP, Disconnect for IPP)
+     * @returns {void}
+     */
     print: async function(imgData, printMode, ipp) {
         logger.info('Starting printing process!');
 

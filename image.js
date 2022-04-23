@@ -2,7 +2,13 @@ const floydSteinberg = require('floyd-steinberg');
 const sharp = require('sharp');
 const logger = require('./logger');
 
-async function processImage(fileName) {
+/**
+ * Processes an image file into 384px wide, monochrome image to be converted to a bitmap
+ * @param {string} fileName - The filename and path to the image to process
+ * @param {string} skipFS - Flag to skip dithering, used when image is already monochrome
+ * @return {Object} An object containing the image as a buffer, and info about it
+ */
+async function processImage(fileName,skipFS) {
     logger.info(`Processing image ${fileName}...`);
     const monoImage = await sharp(fileName)
                         .resize(384)
@@ -13,7 +19,10 @@ async function processImage(fileName) {
                         .raw()
                         .toBuffer({ resolveWithObject: true })
                         .then(raw => {
-                            return floydSteinberg(raw)
+                            if(!skipFS) {
+                                return floydSteinberg(raw)
+                            }
+                            return raw;
                         });
                
     logger.trace('Image converted to monochrome, 384px wide...');
@@ -28,11 +37,24 @@ async function processImage(fileName) {
 }
 
 module.exports = {
-    process: async function(fileName) {
-        const processed = await processImage(fileName);
+
+    /**
+     * Processes an image file into a bitmap the printer supports
+     * @param {string} fileName - The filename and path to the image to process
+     * @param {string} skipFS - Flag to skip dithering, used when image is already monochrome
+     * @return {Array} An array of 48 byte buffers, 1 per line of the image
+     */
+    process: async function(fileName, skipFS) {
+        const processed = await processImage(fileName, skipFS);
         logger.trace('Formatting image for printing...');
         return await this.buildBMP(processed);
     },
+
+    /**
+     * Processes a raw image into a bitmap the printer supports
+     * @param {Object} img - The image object, .data contains a buffer of raw pixels and .info contains image info e.g dimensions
+     * @return {Array} An array of 48 byte buffers, 1 per line of the image
+     */
     buildBMP: async function(img) {
         let imgArray = [];
         let buffctr = 0

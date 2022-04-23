@@ -10,14 +10,11 @@ const args = cli.args;
 
 async function main() {
 
-    
     try {
 
         if(args.ipp) {
             //IPP / Postscript mode, so don't connect to the printer right away
-
             await ipp.listenForPrintJobs();
-
         }
         else {
             await printer.connect(args.devicename, args.timeout);
@@ -44,7 +41,6 @@ async function main() {
             }
         }
 
-        
     }
     catch(e) {
         logger.error(e, 'Oh noes!');
