@@ -5,7 +5,10 @@ const image = require('./image');
 const text = require('./text');
 const cli = require('./cli');
 const logger = require('./logger');
-const ipp = require('./ipp');
+//const ipp = require('./ipp');
+const http = require('./http');
+const sms = require('./sms');
+
 const args = cli.args;
 
 async function main() {
@@ -13,8 +16,16 @@ async function main() {
     try {
 
         if(args.ipp) {
-            //IPP / Postscript mode, so don't connect to the printer right away
-            await ipp.listenForPrintJobs();
+           //IPP / Postscript mode, so don't connect to the printer right away
+           await ipp.listenForPrintJobs();
+        }
+        else if(args.http) {
+            //HTTP Mode, used for controlling the printer via its REST API
+            await http.listen();
+        }
+        else if(args.sms) {
+            //SMS Mode, used for controlling the printer with printkitty-sms-service
+            await sms.poll(args.pollfrequency);
         }
         else {
             await printer.connect(args.devicename, args.timeout);

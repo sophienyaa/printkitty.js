@@ -1,6 +1,7 @@
 const sharp = require('sharp');
 const image = require('./image');
 const logger = require('./logger');
+const textToImage = require('text-to-image');
 
 /**
  * Creates an image from the given text to be processed and printed
@@ -11,23 +12,22 @@ const logger = require('./logger');
  */
 async function addTextOnImage(text, font, size) {
   try {
-
-    //TODO make this dynamic / generally improve it. Works for now though
-    const width = 348;
-    const height = 348;
-
-    const svgImage = `
-    <svg width="${width}" height="${height}">
-      <style>
-      .title { fill: #001; font-size: ${size}px; font-family:"${font}"}
-      </style>
-      <text x="50%" y="50%" text-anchor="middle" class="title">${text}</text>
-    </svg>
-    `;
-
-    const svgBuffer = Buffer.from(svgImage);
-    return await sharp(svgBuffer)
-                            .flatten({ background: '#FFFFFF' })
+    const dataUri = await textToImage.generate(text, {
+      debug: false,
+      maxWidth: 384, //width of the printer
+      fontSize: size,
+      fontFamily: font,
+      lineHeight: size+10,
+      margin: 5,
+      bgColor: 'white',
+      textColor: 'black',
+    });
+    
+    //TODO: this, better lol
+    let buff = new Buffer(dataUri.substring(dataUri.indexOf(',') + 1), 'base64');
+    
+    return await sharp(buff)
+                            //.flatten({ background: '#FFFFFF' })
                             .extractChannel('green')
                             .raw()
                             .toBuffer({ resolveWithObject: true });

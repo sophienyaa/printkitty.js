@@ -87,8 +87,9 @@ Eject paper for 100 steps
 
 There are a tonne of general improvements and optimisations to make but I'd like to also implement features such as:
 
-* RESTful API
+* Re-write this mess in TypeScript
 * GUI/Front End
+* ~~RESTful API~~ (partially done)
 * ~~IPP/PS driver so the printer can be used *...like a normal printer.*~~
 
 ## Thanks

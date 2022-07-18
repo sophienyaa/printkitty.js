@@ -12,7 +12,7 @@ const commands = {
     feedPaper: {
         byte: 0xA1,
         options: {
-            postPrintDefault: Buffer.from([120])
+            postPrintDefault: Buffer.from([250])
         }
     },
     print: {
@@ -295,20 +295,20 @@ module.exports = {
         await writeCharacteristic.writeAsync(lattice, true);
 
         //3. set energy
-        logger.trace(`Setting energy to ${commands.energyLevel.options.low}`);
-        const energy = await buildCommandMessage(commands.energyLevel.byte, commands.energyLevel.options.low);
+        logger.trace(`Setting energy to ${commands.energyLevel.options.high}`);
+        const energy = await buildCommandMessage(commands.energyLevel.byte, commands.energyLevel.options.high);
         await writeCharacteristic.writeAsync(energy, true);
 
         //4. set drawing mode
         logger.trace(`Setting drawing mode to ${printMode}`);
         const drawingMode = printMode === 'image' ?  commands.drawingMode.options.image :  commands.drawingMode.options.text;
         const mode = await buildCommandMessage(commands.drawingMode.byte,drawingMode);
-        await writeCharacteristic.write(mode, true);
+        await writeCharacteristic.writeAsync(mode, true);
         
         //5.set feed speed
         logger.trace(`Setting feed speed to ${commands.speed.options.default}`);
         const speed = await buildCommandMessage(commands.speed.byte, commands.speed.options.default); //TODO: move to config
-        await writeCharacteristic.write(speed, true);
+        await writeCharacteristic.writeAsync(speed, true);
 
         //6. print the image, sleep 10ms between lines so the printer doesn't get overwhelmed
         logger.trace(`Printing image!, has ${imgData.length} lines`);
@@ -318,15 +318,13 @@ module.exports = {
             await sleep(10);
         }
 
-        //7. feed
-        logger.trace(`Feeding for ${commands.feedPaper.options.postPrintDefault}`);
-        const feed = await buildCommandMessage(commands.feedPaper.byte, commands.feedPaper.options.postPrintDefault)
-        await writeCharacteristic.write(feed, true);
+        const feed = await buildCommandMessage(commands.feedPaper.byte, Buffer.from([100]))
+        await writeCharacteristic.writeAsync(feed, true);
 
-        //8. finish lattice
+        //7. finish lattice
         logger.trace('Performing final lattice magic');
         const finish = await buildCommandMessage(commands.latticeControl.byte, commands.latticeControl.options.finishLattice);
-        await writeCharacteristic.write(finish, true);
+        await writeCharacteristic.writeAsync(finish, true);
 
         logger.info('Printing complete!');
 

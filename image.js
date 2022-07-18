@@ -16,12 +16,13 @@ async function processImage(fileName,skipFS) {
                         .modulate({
                             brightness:1
                         })
+                        .png({dither:1, colors:2})
                         .raw()
                         .toBuffer({ resolveWithObject: true })
                         .then(raw => {
-                            if(!skipFS) {
-                                return floydSteinberg(raw)
-                            }
+                            //if(!skipFS) {
+                                //return floydSteinberg(raw)
+                            //}
                             return raw;
                         });
                
@@ -65,7 +66,7 @@ module.exports = {
             for(let x = 0; x < img.info.width; x++ ) {
     
                 let bit = '1';
-                if(img.data[buffctr] == 0xFF) {
+                if(img.data[buffctr] > 0x01) {
                     bit = '0';
                 }
     

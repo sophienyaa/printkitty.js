@@ -11,6 +11,22 @@ const argv = yargs
         description: 'Run in IPP/Postscript mode, exposes a generic PS printer you can use from any app',
         type: 'boolean',
     })
+    .option('http', {
+        description: 'Run in HTTP mode, exposes API for printing',
+        type: 'boolean',
+    })
+    .option('sms', {
+        description: 'Run in SMS mode, polls printkitty-sms-service for SMS to print, provide the base url for the service',
+        type: 'string',
+    })
+    .option('smsuser', {
+        description: 'username for the printkitty-sms-service',
+        type: 'string',
+    })
+    .option('smspassword', {
+        description: 'password for the printkitty-sms-service',
+        type: 'string',
+    })
     .option('ippname', {
         alias: 'q',
         description: 'Name to broadcast when in IPP/PS Mode (e.g "kitty")',
@@ -66,6 +82,12 @@ const argv = yargs
         type: 'integer',
         default: 5
     })
+    .option('pollfrequency', {
+        alias: 'q',
+        description: 'Frequency in seconds to poll for new SMS messages',
+        type: 'integer',
+        default: 10
+    })
     .option('loglevel', {
         alias: 'l',
         description: 'Logging level to use, values are trace, debug, info, warn, error, fatal. Defaults to error',
@@ -80,7 +102,7 @@ const argv = yargs
     .demandOption('devicename', 'You must specify a device')
     .wrap(yargs.terminalWidth())
     .check((argv) => {
-        if (!argv.ipp & !argv.image && !argv.text && !argv.eject && !argv.retract && !argv.getinfo && !argv.getstatus ) {
+        if (!argv.ipp & !argv.image && !argv.text && !argv.eject && !argv.retract && !argv.getinfo && !argv.getstatus && !argv.http && !argv.sms ) {
           throw new Error("Oh Noes! You must specify a task to perform, e.g --image <image>, --eject 20")
         } else {
           return true
