@@ -27,6 +27,11 @@ const argv = yargs
         description: 'password for the printkitty-sms-service',
         type: 'string',
     })
+    .option('smspoll', {
+        description: 'Frequency in seconds to poll for new SMS messages',
+        type: 'integer',
+        default: 10
+    })
     .option('ippname', {
         alias: 'q',
         description: 'Name to broadcast when in IPP/PS Mode (e.g "kitty")',
@@ -82,12 +87,7 @@ const argv = yargs
         type: 'integer',
         default: 5
     })
-    .option('pollfrequency', {
-        alias: 'q',
-        description: 'Frequency in seconds to poll for new SMS messages',
-        type: 'integer',
-        default: 10
-    })
+
     .option('loglevel', {
         alias: 'l',
         description: 'Logging level to use, values are trace, debug, info, warn, error, fatal. Defaults to error',

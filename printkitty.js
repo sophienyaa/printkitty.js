@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
+require('dotenv').config()
 const printer = require('./printer');
 const image = require('./image');
 const text = require('./text');
 const cli = require('./cli');
 const logger = require('./logger');
-//const ipp = require('./ipp');
+const ipp = require('./ipp');
 const http = require('./http');
 const sms = require('./sms');
 
@@ -25,7 +26,7 @@ async function main() {
         }
         else if(args.sms) {
             //SMS Mode, used for controlling the printer with printkitty-sms-service
-            await sms.poll(args.pollfrequency);
+            await sms.poll(args.smspoll);
         }
         else {
             await printer.connect(args.devicename, args.timeout);

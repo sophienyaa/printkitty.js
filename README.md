@@ -1,6 +1,5 @@
 # printkitty.js
 
-
 <img src="img/uwu-transparent.png" alt="drawing" width="200"/>
 <span style="display: block;">~nyaa!</span>
 
@@ -39,6 +38,10 @@ You'll need NodeJS and NPM installed, this has been tested with v17.
 4. Link the command with `sudo npm link`
 
 Once you've done this you can simply run `printkitty --<options>` 
+
+printkitty.js supports both environment variables (prefixed with `PRINTKITTY_`) in lieu of command line options, as well as [dotenv](https://www.npmjs.com/package/dotenv).
+
+This is of particular use when running in SMS mode, as you can store the details of your [printkitty-sms-service](https://github.com/mickwheelz/printkitty-sms-service) in a `.env` file rather than having to pass them each time.
 
 See the next section for some examples
 
@@ -80,8 +83,29 @@ Eject paper for 100 steps
 | -n |--devicename  |The name of your cat printer (e.g `GT01`)                                          |string     |`GB01` |Yes     |
 | -o |--timeout     |Time in seconds to wait before aborting, when connecting to the printer (e.g `10`) |integer    |`5`    |        |
 | -l |--loglevel    |Logging level to use. Options: `trace`, `debug`, `info`, `warn`, `error`, `fatal.` |string     |`info` |        |
+|    |--sms         |Run in SMS mode, polls printkitty-sms-service for SMS to print, provide the base url for the service| string | |Yes OR |
+|    |--smsuser     |username for the printkitty-sms-service         | string | ||
+|    |--smspassword |password for the printkitty-sms-service         | string | ||
+|    |--smspoll     |Frequency in seconds to poll for new SMS messages                | integer | `10` ||
+|    |--http     |Run in HTTP mode, exposes API for printing                | boolean | |Yes OR|
 | -h |--help        |Show help                                                                          |boolean    |       |        |
 
+
+## SMS Mode
+
+printkitty.js supports receiving SMS messages via [printkitty-sms-service](https://github.com/mickwheelz/printkitty-sms-service).
+
+Once you've setup the service as described in the repo above, you can run printkitty.js on your local machine to poll for, and print SMSs
+
+The easiest way of configuring for SMS mode, is a `.env` file, here is an example;
+
+```
+PRINTKITTY_FONT=Comic Sans MS
+PRINTKITTY_FONTSIZE=30
+PRINTKITTY_SMSUSER=admin
+PRINTKITTY_SMSPASSWORD=password
+PRINTKITTY_SMS=https://mycoolservice.herokuapp.com
+```
 
 ## Future Ideas
 
@@ -89,6 +113,7 @@ There are a tonne of general improvements and optimisations to make but I'd like
 
 * Re-write this mess in TypeScript
 * GUI/Front End
+* ~~SMS support~~ (partially done)
 * ~~RESTful API~~ (partially done)
 * ~~IPP/PS driver so the printer can be used *...like a normal printer.*~~
 

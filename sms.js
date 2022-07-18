@@ -14,29 +14,34 @@ const auth = {
 }
 
 async function pollForSMS() {
-
     logger.trace(`Polling for new SMSs...`)
-    const pollResponse = await axios.get(`${args.sms}/getSMS/PENDING`, auth)
-    
-    if(pollResponse.status === 200) {
-        logger.trace(`Got ${pollResponse.data.length} messages to process`)
-        pollResponse.data.forEach(async (sms) => {
-            let success = false;
-            try {
-                const formattedSMS = formatSMSToPrint(sms, true)
-                logger.trace(`Printing: ${formattedSMS}`)
-                await printer.connect(args.devicename, args.timeout)
-                const toPrint = await text.processText(formattedSMS, 'Comic Sans MS', 30)
-                await printer.print(toPrint, 'text', true)
-                success = true
-            } catch (e) {
-                logger.error(e)
-            }
-            await updateSMSRecord(sms,success)
-        })
+    try {
+        const pollResponse = await axios.get(`${args.sms}/getSMS/PENDING`, auth)
+        
+        if(pollResponse.status === 200) {
+            logger.trace(`Got ${pollResponse.data.length} messages to process`)
+            pollResponse.data.forEach(async (sms) => {
+                let success = false;
+                try {
+                    const formattedSMS = formatSMSToPrint(sms, true)
+                    logger.trace(`Printing: ${formattedSMS}`)
+                    await printer.connect(args.devicename, args.timeout)
+                    const toPrint = await text.processText(formattedSMS, args.font, args.fontsize)
+                    await printer.print(toPrint, 'text', true)
+                    success = true
+                } catch (e) {
+                    logger.error(e)
+                }
+                await updateSMSRecord(sms,success)
+            })
+        }
+        else {
+            throw `Failed to poll for SMSs, code ${pollResponse.code}`
+        }
     }
-    else {
-        throw 'oh noes'
+    catch(e) {
+        logger.error(e)
+        process.exit(1);
     }
 }
 
@@ -54,20 +59,19 @@ function formatSMSToPrint(sms, mask) {
 async function updateSMSRecord(record, success) {
     const updateResponse = await axios.post(`${args.sms}/updateSMSStatus/${record._id}`,{status: success ? 'COMPLETE' : 'ERROR'}, auth)
     if (updateResponse.status !== 200) {
-        throw 'oh noes'
+        throw `Failed to update SMS record, code: ${updateResponse.code}`
     }
 }
 
 module.exports = {
 
     /**
-     * Listens for print and handles jobs over HTTP.
+     * Poll the printkitty-sms-service for SMS to process
      * @return {void}
      */
     poll: async function(freq) { 
-
         const loop = setInterval(async () => {
             await pollForSMS()
-        }, 10000);
+        }, freq*1000);
    }
 }
