@@ -225,11 +225,24 @@ module.exports = {
      */
     connect: async function(deviceName, timeoutS) {
         //connect to printer, give name and timeout in ms
-        printer =  await connectToPrinter(deviceName, (timeoutS*1000));
+        printer = await connectToPrinter(deviceName, (timeoutS*1000));
         //get our chars
         await setCharacteristics(printer);
         //setup event listeners
         await setupListeners(notifyCharacteristic, writeCharacteristic);
+    },
+
+    /**
+     * Connects to a printer over BLE and disconnects to prevent it going to sleep
+     * @param {String} deviceName - The devices advertised name (e.g GB01)
+     * @param {integer} timeoutS - Time to wait in seconds before timing out
+     * @param {integer} wait - Time to wait in milliseconds before disconnecting
+     * @returns {void}
+     */
+    keepAwake: async function(deviceName, timeout, wait) {
+        printer = await connectToPrinter(deviceName, (timeout*1000));
+        sleep(wait);
+        printer.disconnectAsync();
     },
 
     /**
@@ -318,18 +331,19 @@ module.exports = {
             await sleep(10);
         }
 
-        const feed = await buildCommandMessage(commands.feedPaper.byte, Buffer.from([100]))
-        await writeCharacteristic.writeAsync(feed, true);
-
         //7. finish lattice
         logger.trace('Performing final lattice magic');
         const finish = await buildCommandMessage(commands.latticeControl.byte, commands.latticeControl.options.finishLattice);
         await writeCharacteristic.writeAsync(finish, true);
-
         logger.info('Printing complete!');
 
-        //disconnect when finished
-        await printer.disconnectAsync();
+        await this.feedPaper(120);
+
+        await sleep(1000);
+        await printer.disconnectAsync()
+
+
+
         if(!ipp) {
             process.exit(0);
         }

@@ -3,6 +3,7 @@ const printer = require('./printer');
 const text = require('./text');
 const cli = require('./cli');
 const logger = require('./logger');
+const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
 
 const args = cli.args;
 
@@ -20,6 +21,12 @@ async function pollForSMS() {
         
         if(pollResponse.status === 200) {
             logger.trace(`Got ${pollResponse.data.length} messages to process`)
+
+            if(pollResponse.data.length === 0) {
+                //just keep it awake
+                //printer.keepAwake(args.devicename, args.timeout, 1000)
+            }
+
             pollResponse.data.forEach(async (sms) => {
                 let success = false;
                 try {
@@ -53,7 +60,13 @@ function formatSMSToPrint(sms, mask) {
         const padding = ''.padEnd(fromNumber.length-6, '*')
         fromNumber = `${ccode}${padding}${endtwo}`
     }
-    return `From: ${fromNumber} Msg: ${sms.msg}`
+    let toCCode
+    if(sms.to) {
+        const parsed = phoneUtil.parse(sms.to)
+        toCCode = phoneUtil.getRegionCodeForNumber(parsed)
+    }
+
+    return `${toCCode ? `To: ${toCCode} \n` : ''}From: ${fromNumber} \n Msg: ${sms.msg}`
 }
 
 async function updateSMSRecord(record, success) {
